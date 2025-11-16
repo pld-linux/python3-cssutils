@@ -9,7 +9,7 @@ Summary:	A CSS Cascading Style Sheets library for Python
 Summary(pl.UTF-8):	Biblioteka CSS (Cascading Style Sheets) dla Pythona
 Name:		python3-%{module}
 Version:	2.11.1
-Release:	1
+Release:	2
 Epoch:		1
 License:	LGPL v3+
 Group:		Libraries/Python
@@ -47,6 +47,7 @@ BuildRequires:	python3-sphinx_lint
 BuildRequires:	sphinx-pdg-3 >= 3.5
 %endif
 Requires:	python3-modules >= 1:3.8
+Conflicts:	python-cssutils < 1.0.2-12
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
