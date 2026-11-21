@@ -8,22 +8,24 @@
 Summary:	A CSS Cascading Style Sheets library for Python
 Summary(pl.UTF-8):	Biblioteka CSS (Cascading Style Sheets) dla Pythona
 Name:		python3-%{module}
-Version:	2.11.1
-Release:	2
+Version:	2.15.0
+Release:	1
 Epoch:		1
 License:	LGPL v3+
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/cssutils/
 Source0:	https://files.pythonhosted.org/packages/source/c/cssutils/%{module}-%{version}.tar.gz
-# Source0-md5:	c8c21e635454d9ca73b21892def35f55
+# Source0-md5:	8a90c28a2f037c525a25e5a2541fd9a5
 URL:		http://cthedot.de/cssutils/
-BuildRequires:	python3-devel >= 1:3.8
+BuildRequires:	python3-coherent.licensed
+BuildRequires:	python3-devel >= 1:3.10
 BuildRequires:	python3-build
 BuildRequires:	python3-installer
-BuildRequires:	python3-setuptools >= 1:61.2
+BuildRequires:	python3-setuptools >= 1:77
 BuildRequires:	python3-setuptools_scm >= 3.4.1
 %if %{with tests}
 BuildRequires:	python3-cssselect
+BuildRequires:	python3-encutils
 %if "%{py3_ver}" == "3.8"
 BuildRequires:	python3-importlib_resources
 %endif
@@ -46,7 +48,7 @@ BuildRequires:	python3-rst.linker >= 1.9
 BuildRequires:	python3-sphinx_lint
 BuildRequires:	sphinx-pdg-3 >= 3.5
 %endif
-Requires:	python3-modules >= 1:3.8
+Requires:	python3-modules >= 1:3.10
 Conflicts:	python-cssutils < 1.0.2-12
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -64,8 +66,8 @@ Level 2 CSS.
 %setup -q -n %{module}-%{version}
 
 %if %{without tests_net}
-%{__sed} -i -e 's/def test_parseUrl/def skip_parseUrl/' cssutils/tests/test_parse.py
-%{__sed} -i -e 's/def test_handlers/def skip_handlers/' cssutils/tests/test_errorhandler.py
+%{__sed} -i -e 's/def test_parseUrl/def skip_parseUrl/' tests/test_parse.py
+%{__sed} -i -e 's/def test_handlers/def skip_handlers/' tests/test_errorhandler.py
 %endif
 
 %build
@@ -73,7 +75,7 @@ Level 2 CSS.
 
 %if %{with tests}
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
-%{__python3} -m pytest cssutils/tests
+%{__python3} -m pytest tests
 %endif
 
 %install
@@ -86,7 +88,6 @@ for f in csscapture csscombine cssparse ; do
 	ln -sf ${f}-3 $RPM_BUILD_ROOT%{_bindir}/$f
 done
 
-%{__rm} -r $RPM_BUILD_ROOT%{py3_sitescriptdir}/cssutils/tests
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -101,5 +102,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/csscombine
 %{_bindir}/cssparse
 %{py3_sitescriptdir}/cssutils
-%{py3_sitescriptdir}/encutils
 %{py3_sitescriptdir}/cssutils-%{version}.dist-info
